@@ -1,0 +1,20 @@
+name: Robot Creador OCI
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  crear-servidor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ejecutar Pila en Oracle
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        with:
+          command: resource-manager job create-apply-job --execution-plan-strategy AUTO_APPROVED --stack-id "${{ secrets.STACK_OCID }}"
+        env:
+          OCI_CLI_USER: ${{ secrets.OCI_USER_ID }}
+          OCI_CLI_TENANCY: ${{ secrets.OCI_TENANCY_ID }}
+          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
+          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_KEY_CONTENT }}
+          OCI_CLI_REGION: ${{ secrets.OCI_REGION }}
